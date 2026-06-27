@@ -13,8 +13,8 @@ export default function RegistroPage() {
   const router = useRouter();
   const { signUpWithEmail, signInWithGoogle, loading, error } = useAuth();
 
-  const handleRegistro = async (nombre: string, email: string, password: string) => {
-    const ok = await signUpWithEmail(email, password, nombre);
+  const handleRegistro = async (nombre: string, email: string, password: string, role: string) => {
+    const ok = await signUpWithEmail(email, password, nombre, role);
     if (ok) router.push('/onboarding');
   };
 

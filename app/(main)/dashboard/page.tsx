@@ -6,6 +6,7 @@
 
 import Link from 'next/link';
 import { useEmpresa } from '../../../lib/empresa/useEmpresa';
+import { useAuth } from '../../../lib/auth/useAuth';
 import MetricCard from '../../ui/shared/MetricCard';
 import type { NivelRiesgo } from '../../../lib/diagnostico/types';
 
@@ -29,6 +30,9 @@ function formatFecha(iso: string) {
 
 export default function DashboardPage() {
   const { empresa, historial } = useEmpresa();
+  const { user } = useAuth();
+  
+  const userRole = user?.user_metadata?.role ?? 'admin';
 
   const ultimoDiagnostico = historial[0] ?? null;
   const totalDiagnosticos = historial.length;
@@ -39,6 +43,15 @@ export default function DashboardPage() {
 
   return (
     <div className="p-6 lg:p-8 max-w-6xl mx-auto space-y-8">
+      {/* ── Banner de Auditoría ── */}
+      {userRole === 'auditor' && (
+        <div className="animate-scale-in flex items-center justify-between px-4 py-3.5 rounded-2xl bg-[#FEF3C7] border border-[#FDE68A] text-sm text-[#D97706] font-semibold shadow-sm">
+          <span className="flex items-center gap-2">
+            <span className="text-base">🔍</span>
+            <span><strong>Modo Auditoría (Solo Lectura):</strong> Tienes permisos de visualización de reportes y diagnóstico. La creación y edición de datos está bloqueada.</span>
+          </span>
+        </div>
+      )}
 
       {/* ── Header ── */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 animate-fade-slide-up">
@@ -55,14 +68,25 @@ export default function DashboardPage() {
             </p>
           )}
         </div>
-        <Link
-          id="btn-nuevo-diagnostico"
-          href="/diagnostico"
-          className="btn-primary inline-flex items-center gap-2 px-5 py-3 text-sm no-underline"
-        >
-          <span className="text-base">📋</span>
-          Nuevo Diagnóstico
-        </Link>
+        {userRole === 'auditor' ? (
+          <button
+            disabled
+            title="Acceso de Solo Lectura (Auditor)"
+            className="bg-[#E2E8F0] border border-[#CBD5E1] text-[#94A3B8] inline-flex items-center gap-2 px-5 py-3 text-sm rounded-xl cursor-not-allowed font-semibold shadow-sm"
+          >
+            <span className="text-base">🔒</span>
+            Nuevo Diagnóstico (Auditor)
+          </button>
+        ) : (
+          <Link
+            id="btn-nuevo-diagnostico"
+            href="/diagnostico"
+            className="btn-primary inline-flex items-center gap-2 px-5 py-3 text-sm no-underline animate-hover"
+          >
+            <span className="text-base">📋</span>
+            Nuevo Diagnóstico
+          </Link>
+        )}
       </div>
 
       {/* ── Métricas ── */}
@@ -107,12 +131,21 @@ export default function DashboardPage() {
               Realiza tu primer autodiagnóstico de cumplimiento de la Ley 1581 de 2012.
               El proceso toma menos de 10 minutos.
             </p>
-            <Link
-              href="/diagnostico"
-              className="btn-primary inline-flex items-center gap-2 px-6 py-3 text-sm no-underline"
-            >
-              🚀 Iniciar primer diagnóstico
-            </Link>
+            {userRole === 'auditor' ? (
+              <button
+                disabled
+                className="bg-[#E2E8F0] border border-[#CBD5E1] text-[#94A3B8] inline-flex items-center gap-2 px-6 py-3 text-sm rounded-xl cursor-not-allowed font-semibold shadow-sm"
+              >
+                🔒 Acceso de Solo Lectura (Auditor)
+              </button>
+            ) : (
+              <Link
+                href="/diagnostico"
+                className="btn-primary inline-flex items-center gap-2 px-6 py-3 text-sm no-underline"
+              >
+                🚀 Iniciar primer diagnóstico
+              </Link>
+            )}
           </div>
         </div>
       )}

@@ -7,7 +7,7 @@
 import { useState } from 'react';
 
 interface RegistroFormProps {
-  onSubmit: (nombre: string, email: string, password: string) => Promise<void>;
+  onSubmit: (nombre: string, email: string, password: string, role: string) => Promise<void>;
   onGoogle: () => Promise<void>;
   loading: boolean;
   error: string | null;
@@ -24,6 +24,7 @@ function evaluarFortaleza(p: string): { nivel: number; label: string; color: str
 export default function RegistroForm({ onSubmit, onGoogle, loading, error }: RegistroFormProps) {
   const [nombre,    setNombre]    = useState('');
   const [email,     setEmail]     = useState('');
+  const [role,      setRole]      = useState('admin');
   const [password,  setPassword]  = useState('');
   const [confirm,   setConfirm]   = useState('');
   const [showPass,  setShowPass]  = useState(false);
@@ -39,7 +40,7 @@ export default function RegistroForm({ onSubmit, onGoogle, loading, error }: Reg
     e.preventDefault();
     setTouched({ nombre: true, email: true, password: true, confirm: true });
     if (!nombreValido || !emailValido || !passwordValida || !confirmaIgual) return;
-    await onSubmit(nombre.trim(), email, password);
+    await onSubmit(nombre.trim(), email, password, role);
   };
 
   return (
@@ -93,6 +94,23 @@ export default function RegistroForm({ onSubmit, onGoogle, loading, error }: Reg
         {touched.email && !emailValido && (
           <p className="text-xs text-[#EF4444]">Ingrese un correo electrónico válido</p>
         )}
+      </div>
+
+      {/* Rol de usuario */}
+      <div className="space-y-1.5">
+        <label htmlFor="reg-role" className="block text-sm font-semibold text-[#0F172A]">
+          Rol en la plataforma
+        </label>
+        <select
+          id="reg-role"
+          value={role}
+          onChange={(e) => setRole(e.target.value)}
+          className="input-base w-full px-4 py-3 text-sm bg-white text-[#0F172A]"
+        >
+          <option value="admin">🛡️ Administrador (Acceso total)</option>
+          <option value="evaluador">📊 Evaluador (Crear y ver diagnósticos)</option>
+          <option value="auditor">🔍 Auditor (Solo lectura y reportes)</option>
+        </select>
       </div>
 
       {/* Contraseña */}

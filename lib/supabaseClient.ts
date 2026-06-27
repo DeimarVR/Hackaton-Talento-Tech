@@ -110,7 +110,10 @@ class MockAuth {
       user: {
         id: user.id,
         email: user.email,
-        user_metadata: { full_name: user.nombre },
+        user_metadata: { 
+          full_name: user.nombre,
+          role: user.role ?? 'admin'
+        },
       },
     };
 
@@ -136,6 +139,7 @@ class MockAuth {
       email,
       password,
       nombre: options?.data?.full_name ?? 'Usuario Demo',
+      role: options?.data?.role ?? 'admin',
     };
 
     this.saveLocalStorageUser(newUser);
@@ -145,7 +149,10 @@ class MockAuth {
       user: {
         id: newUser.id,
         email: newUser.email,
-        user_metadata: { full_name: newUser.nombre },
+        user_metadata: { 
+          full_name: newUser.nombre,
+          role: newUser.role
+        },
       },
     };
 
@@ -164,7 +171,10 @@ class MockAuth {
         user: {
           id: 'mock-google-user',
           email: 'demo.cavaltec@gmail.com',
-          user_metadata: { full_name: 'Cavaltec Google Demo' },
+          user_metadata: { 
+            full_name: 'Cavaltec Google Demo',
+            role: 'admin'
+          },
         },
       };
       this.setLocalStorageSession(session);

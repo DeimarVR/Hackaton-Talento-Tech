@@ -303,13 +303,92 @@ button:focus-visible {
 @media print {
   body {
     background: white !important;
-    color: black !important;
+    color: #0F172A !important;
+    font-size: 11pt !important;
   }
+  
+  /* Hide interactive/non-document elements */
+  aside,
   header,
-  .no-print {
+  nav,
+  button,
+  .no-print,
+  #btn-descargar,
+  #btn-reiniciar,
+  #btn-ver-dashboard,
+  .btn-primary,
+  .copilot-inline-container,
+  .footer-legal-resources,
+  footer {
     display: none !important;
   }
-  .print-only {
+  
+  /* Reset container layout to page bounds */
+  main,
+  .flex,
+  .grid,
+  .max-w-4xl,
+  .max-w-6xl {
     display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+    background: transparent !important;
+  }
+
+  /* Force background colors and gradients to print */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Optimize card designs for flat printing */
+  .card, 
+  .rounded-xl, 
+  .rounded-2xl {
+    box-shadow: none !important;
+    border: 1px solid #E2E8F0 !important;
+    page-break-inside: avoid;
+    margin-bottom: 20px !important;
+    padding: 20px !important;
+    background-color: #FFFFFF !important;
+  }
+
+  /* Preserve side-by-side layout for gauge chart and description */
+  .flex-col, .lg\:flex-row {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 30px !important;
+  }
+
+  /* Ensure gauge doesn't scale weirdly */
+  svg {
+    max-width: 180px !important;
+    height: auto !important;
+  }
+
+  /* Print blocks side by side on paper */
+  .grid.gap-4.sm\:grid-cols-3 {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 15px !important;
+  }
+
+  /* Avoid headers showing on the very bottom of a page */
+  h1, h2, h3 {
+    page-break-after: avoid;
+  }
+
+  /* Recommendations listing */
+  ul {
+    page-break-inside: auto;
+  }
+  li {
+    page-break-inside: avoid;
   }
 }

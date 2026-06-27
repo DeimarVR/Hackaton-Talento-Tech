@@ -4,9 +4,11 @@
 // DiagnosticoWizard — Modo Claro (paleta CAVALTEC)
 // ============================================================
 
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useDiagnostico } from '../../../lib/diagnostico/useDiagnostico';
 import { useEmpresa } from '../../../lib/empresa/useEmpresa';
+import { useAuth } from '../../../lib/auth/useAuth';
 import { BLOQUES } from '../../../lib/diagnostico/preguntas';
 import ProgressBar from './ProgressBar';
 import GaugeChart from './GaugeChart';
@@ -17,6 +19,7 @@ import ResultadoPanel from './ResultadoPanel';
 export default function DiagnosticoWizard() {
   const router = useRouter();
   const { guardarDiagnostico, empresa } = useEmpresa();
+  const { user } = useAuth();
   const {
     estado,
     preguntaActual,
@@ -28,6 +31,12 @@ export default function DiagnosticoWizard() {
     cerrarCopilot,
     reiniciar,
   } = useDiagnostico();
+
+  useEffect(() => {
+    if (user && user.user_metadata?.role === 'auditor') {
+      router.push('/dashboard');
+    }
+  }, [user, router]);
 
   const bloqueActual = preguntaActual
     ? BLOQUES.find((b) => b.id === preguntaActual.bloqueId)

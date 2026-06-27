@@ -198,9 +198,9 @@ export default function ResultadoPanel({ resultado, onReiniciar, onVerDashboard 
         <button
           id="btn-descargar"
           onClick={() => window.print()}
-          className="btn-primary flex items-center justify-center gap-2 px-6 py-3 text-sm"
+          className="btn-primary flex items-center justify-center gap-2 px-6 py-3 text-sm hover:scale-[1.02] transition-transform duration-150"
         >
-          📄 Exportar Resultado
+          📄 Descargar Reporte PDF
         </button>
       </div>
     </div>

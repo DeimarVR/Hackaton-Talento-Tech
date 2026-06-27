@@ -64,12 +64,12 @@ export function useAuth() {
   // ----------------------------------------------------------
   // Sign Up con Email + Contraseña
   // ----------------------------------------------------------
-  const signUpWithEmail = useCallback(async (email: string, password: string, nombre?: string) => {
+  const signUpWithEmail = useCallback(async (email: string, password: string, nombre?: string, role: string = 'admin') => {
     setAuthState((prev) => ({ ...prev, loading: true, error: null }));
     const { error } = await supabase.auth.signUp({
       email,
       password,
-      options: { data: { full_name: nombre } },
+      options: { data: { full_name: nombre, role } },
     });
     if (error) {
       setAuthState((prev) => ({ ...prev, loading: false, error: error.message }));
